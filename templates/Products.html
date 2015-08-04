@@ -1,0 +1,58 @@
+<!--<div ng-if="SearchText.length>=3" ng-repeat="product in pc.ProductService.Products  | filter:FilterExpr |orderBy:['SubCategoryName','BrandName'] | groupBy:['BrandName']" >
+	<div ng-show="product.group_by_CHANGED" class='col-md-12'>
+		<div class='row navbar navbar-default' style="margin-top:10px; margin-bottom:8px; background-color:#FFF8DC;">
+			<h3 style="margin-top:10px; margin-left:20px;">{{product.BrandName }} </h3>
+		</div>
+	</div>
+	<div class='box'>
+		<ng-include src="'commonTemplate.html'"></ng-include>
+	</div>
+</div>
+-->
+
+<div ng-repeat="(key, product) in orderedList">
+	<div ng-show="orderedList[key-1][orderKey] !== orderedList[key][orderKey]" class='col-md-12'>
+		<div class='row navbar navbar-default' style="margin-top:10px; margin-bottom:8px; background-color:#FFF8DC;">
+			<h3 style="margin-top:10px; margin-left:20px;">{{product[orderKey]}}</h3>
+		</div>
+	</div>
+	<div class='box'>
+		<ng-include src="'commonTemplate.html'"></ng-include>
+	</div>
+</div>
+	
+<!-- template (common piece of code) -->
+<script type="text/ng-template" id="commonTemplate.html">
+	<div class="BrandName"> <b>{{product.BrandName}}</b> </div>
+	<div class="ProductName"> {{product.ProductName}} </div>
+		<br>
+		<div> <img src="http://wokoshop.com/{{ product.ProductImagePath }}" alt="" border=3 height=75 width=75></img> </div>
+	<div class="ProductVariants"> 
+		<select class="form-control btn btn-default btn-xs text-center" ng-init="SelectedVariant = product.Variants[0]" ng-model="SelectedVariant" ng-options="variant.VariantName for variant in product.Variants" ng-change="ChangeVariant(product.ProductID, SelectedVariant.VariantID)"></select>
+	</div>
+	
+	<div class="Price"> 
+		<strike> {{SelectedVariant.MRP}} </strike> &nbsp; {{SelectedVariant.SellPrice}} 
+	</div>		
+	
+	<div class="AddToCart" ng-if="SelectedVariant.InCart==0">
+		<a class="btn btn-success btn-sm" ng-click="pc.AddToCart(product.ProductID, SelectedVariant.VariantID)">Add to Cart &nbsp;
+			<span class="glyphicon glyphicon-plus"></span> 
+		</a>
+	</div>
+	
+	<div class="AddToCart" ng-if="SelectedVariant.InCart>0">
+		
+		<a class="btn btn-default btn-xs" ng-click="pc.PlusItem(product.ProductID, SelectedVariant.VariantID)">
+			<span class="glyphicon glyphicon-plus"></span> 
+		</a>
+
+		<button type="button" class="btn btn-sm btn-info disabled">{{SelectedVariant.InCart}} in cart</button>
+		
+		
+		<a class="btn btn-default btn-xs" ng-click="pc.MinusItem(product.ProductID, SelectedVariant.VariantID)">
+			<span class="glyphicon glyphicon-minus"></span> 
+		</a>
+	</div>
+
+</script>

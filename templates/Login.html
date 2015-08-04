@@ -1,0 +1,23 @@
+<div>
+
+	<h4>USER LOGIN</h4>
+	<h5>Please enter your e-mail/mobile and password. </h5>
+	<hr>
+	<div class="Name">
+		<input ng-model="Email" type="text" placeholder="Your E-mail/Mobile" class='form-control'/><br>
+	</div>
+	<div class="Name">
+		<input ng-model="Password" type="password" placeholder="Password" class='form-control'/><br>
+	</div>
+	
+	<div class="Name">
+		<button type="button" onclick="vpb_users_login();" class="btn btn-lg btn-primary btn-block" ng-disabled="!Email || !Password">LOGIN</button>
+	</div>
+	
+	<a href="#ForgotPassword"><h5>Forgot Password?</h5></a>
+	If you don't have account, Please : <a href="#SignUp">Sign-up</a>
+	
+	
+	<div class="text-error" id="login_status"></div><!-- Displays Response -->
+	
+</div>

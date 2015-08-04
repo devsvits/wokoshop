@@ -1,0 +1,187 @@
+<section ng-controller="ShoppingCartController">
+
+	<ul ng-init="tab = 1" class="nav nav-tabs nav-justified" role="tablist" style="margin-top:10px;">
+    	<li ng-class="{active:tab==1}"><a data-toggle="tab" ng-click="tab = 1">1. Shopping cart</a></li>
+        <li ng-class="{active:tab==2}"><a data-toggle="tab" ng-click="tab = 2">2. Delivery Address</a></li>
+	</ul>
+	
+	<div ng-show="tab === 1 && TotalAmount == 0">
+		<p style="text-align: center; vertical-align: center; margin-top: 150px;" class="text-info">
+			Your cart is empty. Start shopping now!
+		</p>
+	</div>
+		
+
+	<div ng-show="tab === 1 && TotalAmount > 0">
+		<p class="text-info">
+			Thanks for shopping at the wokoshop Store.<br />
+			This is your shopping cart. Here you can edit the items, 
+			go back to the store, clear the cart, or check out.
+		
+			<button style="margin-left:200px;" type="button" class="btn btn-md btn-success" ng-click="tab = 2">Place order <span class="glyphicon glyphicon-share-alt"></span></button>
+		</p>
+		
+	
+		<table class="table table-bordered">
+			<thead>
+				<!-- header -->
+				<tr class="well">
+					<td><b>Product</b></td>
+					<td><b>Product Name</b></td>
+					<td><b>UNIT PRICE</b></td>
+					<td class="tdCenter"><b>Quantity</b></td>
+					<td class="tdRight"><b>SUBTOTAL</b></td>
+					<td class="tdRight"><b>SAVINGS</b></td>
+					<td />
+				</tr>
+			</thead>
+			<tbody ng-repeat="Item in ProductService.Products">
+				<tr ng-repeat="Variant in Item.Variants | filter: greaterThan('InCart', '0')">
+				
+					<td><img src="{{ Item.ProductImagePath }}" alt="" border=3 height=75 width=75></img></td>
+					<td>{{Item.BrandName}} {{Item.ProductName}} {{Variant.VariantName}}</td>
+					<td><strike>{{Variant.MRP}}</strike><br>{{Variant.SellPrice}}</td>
+					<td>
+						<a class="btn btn-default btn-sm" ng-click="PlusItem(Item.ProductID, Variant.VariantID)">
+							<span class="glyphicon glyphicon-plus"></span> 
+						</a>
+					
+						
+						<span class="badge">{{Variant.InCart}}</span>
+						
+						
+						<a class="btn btn-default btn-sm" ng-click="MinusItem(Item.ProductID, Variant.VariantID)">
+							<span class="glyphicon glyphicon-minus"></span> 
+						</a>
+					</td>
+							
+					<td>{{Variant.InCart * Variant.SellPrice | currency:""}}</td>
+					<td>{{Variant.InCart * (Variant.MRP - Variant.SellPrice) | currency:""}}</td>
+					
+					<td class="tdCenter" title="remove from cart">
+						<a href="" ng-click="RemoveItem(Item.ProductID, Variant.VariantID)">
+							<span class="glyphicon glyphicon-remove"></span> 
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<button style="margin-left:862px;" type="button" class="btn btn-md btn-success" ng-click="tab = 2">Place order <span class="glyphicon glyphicon-share-alt"></span></button>
+
+	</div>					
+		
+	<div ng-show="tab === 2 && TotalAmount == 0">
+		<p style="text-align: center; vertical-align: center; margin-top: 150px;" class="text-info">
+			Your cart is empty. Start shopping now!
+		</p>
+	</div>	
+	
+	<div ng-show="tab === 2 && TotalAmount > 0">
+		
+		
+		<form name="form" ng-submit="PlaceOrder()" role="form">
+		
+		
+		<table class="table">
+			<tbody>
+				<tr>
+					
+					
+					<td>		
+					
+					<!--<h4>Name & address</h4>
+						<div class="Name"> -->		
+						
+						<div class="form-group">
+							<label for="CustomerName">Customer Name</label>
+							<i class="fa fa-key"></i>
+							<input type="text" name="CustomerName" id="CustomerName" class="form-control" ng-model="CustomerName" required />
+							<span style="color:red" ng-show="form.CustomerName.$dirty && form.CustomerName.$error.required" class="help-block">Customer Name is required</span>
+						</div>
+						
+						<div class="form-group">
+							<label for="CustomerAddress">Customer Address</label>
+							<i class="fa fa-key"></i>
+							<textarea type="text" name="CustomerAddress" id="CustomerAddress" class="form-control" ng-model="CustomerAddress" rows="4" required ></textarea>
+							<span style="color:red" ng-show="form.CustomerAddress.$dirty && form.CustomerAddress.$error.required" class="help-block">Customer Address is required</span>
+						</div>
+						
+						<div class="form-group">
+							<label for="CustomerCity">Select City</label>
+							<i class="fa fa-key"></i>
+							<select name="CustomerCity" id="CustomerCity" class="form-control" ng-model="CustomerCity" required>
+								<option value="" ng-selected="selected">-- Select City -- </option>
+								<option value="Chhatarpur">Chhatarpur</option>
+							</select>
+							<span style="color:red" ng-show="form.CustomerCity.$dirty && form.CustomerCity.$error.required" class="help-block">City is required</span>
+						</div>
+						
+						
+						
+					</td>
+					
+					<td>
+						
+						<div class="form-group">
+							<label for="CustomerMobile">Mobile Number</label>
+							<i class="fa fa-key"></i>
+							<input type="text" name="CustomerMobile" id="CustomerMobile" class="form-control" ng-model="CustomerMobile" maxlength="10" required />
+							<span style="color:red" ng-show="form.CustomerMobile.$dirty && form.CustomerMobile.$error.required" class="help-block">Mobile Number is required</span>
+						</div>
+					
+						<div class="form-group">
+							<label for="DeliveryOption">Date/time of delivery</label>
+							<i class="fa fa-key"></i>
+						
+							<div ng-if="CurrentHour>=9 && CurrentHour<12">
+								<input type="radio" name="Delivery" ng-model="Delivery" value="2" required> Today (12:00-15:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" value="3" required> Today (15:00-18:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" value="4" required> Today (18:00-21:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" value="5" required> Tomorrow (09:00-12:00) <br/>
+							</div>
+							<div ng-if="CurrentHour>=12 && CurrentHour<15">
+								<input type="radio" name="Delivery" ng-model="Delivery" value="3" required> Today (15:00-18:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" value="4" required> Today (18:00-21:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" value="5" required> Tomorrow (09:00-12:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" value="6" required> Tomorrow (12:00-15:00) <br/>
+							</div>
+							<div ng-if="CurrentHour>=15 && CurrentHour<18">
+								<input type="radio" name="Delivery" ng-model="Delivery" value="4" required> Today (18:00-21:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" required> Tomorrow (09:00-12:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" required> Tomorrow (12:00-15:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" required> Tomorrow (15:00-18:00) <br/>
+							</div>
+							<div ng-if="(CurrentHour>=18 && CurrentHour<24) || (CurrentHour>=1 && CurrentHour<9)" >
+								<input type="radio" name="Delivery" ng-model="Delivery" value="5" required> Tomorrow (09:00-12:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" value="6" required> Tomorrow (12:00-15:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" value="7" required> Tomorrow (15:00-18:00) <br/>
+								<input type="radio" name="Delivery" ng-model="Delivery" value="8" required> Tomorrow (18:00-21:00)	
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="PaymentOption">Payment Option</label>
+							<i class="fa fa-key"></i>
+							<div>
+								<input type="radio" name="Payment" ng-model="Payment" value="1" required> Cash on delivery<br />
+								<input type="radio" name="Payment" ng-model="Payment" value="2" required> Card on delivery<br />
+							</div>
+						</div>
+										
+						<div class="form-actions">
+							<button type="submit" ng-disabled="form.$invalid" class="btn btn-danger">Place order</button>
+						</div>
+											
+						
+						
+					</td>
+					
+				</tr>
+			</tbody>
+		</table>
+		</form>
+		
+	</div>
+			
+</section>

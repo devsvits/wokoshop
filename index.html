@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html  ng-app="sampleApp">
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/mystyle.css">
+	</head>
+
+	<body>
+		
+		<div  ng-controller="MainCtrl as mc">
+		<div class='container'>
+			<div class='row navbar navbar-default navbar-fixed-top'  style="background-color:#006633;">
+				<div class='col-md-1'></div>
+				
+				<div class='col-md-3'>
+					<a href="http://wokoshop.com">
+						<img src="images/logo.png" alt="wokoshop.com" width="300" height="50"/>
+					</a>
+				</div>
+				
+				<div class='col-md-5'>
+					<input style="margin-top:10px;" type="text" ng-model="SearchText" placeholder="Search for more than 10,000 products..." class='form-control' size="50" >
+				</div>
+								<div class='col-md-1'></div>
+				<div class='col-md-2'>
+					<a ui-sref="Login" style="position:absolute; margin-top:15px; color:#FFFCBA"><strong>LOGIN</strong></a>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class='container'>
+			<div class='row navbar navbar-default navbar-fixed-top' style="top:50px; background-color:#FFFCBA;">
+				
+				<div class='col-md-2 Name'>
+					<select ng-show="ShowSC" ng-init="SelectedSuperCategory = SuperCategories[0]" ng-model="SelectedSuperCategory" ng-options="x as x.name for x in SuperCategories | orderBy:'name'" class='form-control' style="position:absolute; margin-left:10px;"> 
+						<option value="" ng-selected="selected">Select a Category</option>
+					</select>
+					
+					<select ng-show="ShowBrand" ng-init="SelectedBrand = Brands[0]" ng-model="SelectedBrand" ng-options="x as x.name for x in Brands | orderBy:'name'" class='form-control' style="position:absolute; margin-left:10px;"> 
+						<option value="" ng-selected="selected">Select a Brand</option>
+					</select>
+					<button class="btn btn-md btn-warning" ng-click="toggle()" style="position:absolute; margin-left:250px;">
+						<span class="glyphicon glyphicon-transfer"></span>
+					</button>
+				</div>
+				
+				<div class='col-md-7'></div>
+								
+				<div class='col-md-3'>
+					<a href="#ShoppingCart" style="position:absolute; margin-top:15px; margin-left:15px; color:#0000FF"> 
+						<button class="btn btn-md btn-danger" style="position:absolute; margin-top:-8px;">
+							CART <span class="glyphicon glyphicon-shopping-cart"></span> Total <span class="badge">{{TotalAmount|currency:""}}</span> items    <span class="badge">{{TotalItems}}</span>
+						</button>
+					</a>
+				</div>
+				
+			</div>
+		</div>
+		
+		
+		<div id="middle" class='container'>
+			<div class='row'>
+				<div ng-show="ShowSC" id="left" class='col-md-2'>
+					<table>
+						<tr ng-model = "SelectedCategory" ng-repeat="x in Categories | filter:{display_with: SelectedSuperCategory.id}:true | orderBy:'name'">
+							<td><b>{{ x.name }} ({{ x.id }})</b> 
+								
+								<table>
+									<tr ng-repeat="sc in x.subcategories | orderBy:'scname'">
+										<td>&nbsp;&nbsp;&nbsp;
+											<a ui-sref="Category({ SCID: sc.scid })" ui-sref-active="active" >{{ sc.scname }}</a>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<br>
+						</tr>
+					</table>
+				</div>
+				
+				<div ng-show="ShowBrand" id="left" class='col-md-2'>
+					<table>
+						<tr ng-model = "SelectedBrand" ng-repeat="x in Brands | filter:{id: SelectedBrand.id}:true | orderBy:'name'">
+							<td><b>{{ x.name }} ({{ x.id }})</b> 
+								<table>
+									<tr ng-repeat="sc in x.subcategories | orderBy:'scname' ">
+										<td>&nbsp;&nbsp;&nbsp;
+											{{sc.scname}}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<br>
+						</tr>
+					</table>
+				</div>
+				
+				<div id="right" class='col-md-10'>
+					<div ui-view></div>
+					<!--<div ng-view></div>-->
+				</div>
+			</div>
+		</div>
+		
+		
+		</div>
+		
+		<div class ="navbar navbar-default navbar-fixed-bottom">
+		
+			<!-- Need Help -->
+			<div style= "background-color:#006633; font-family:arial; font-size:14px;">
+				<h3 style="text-align:center;  color:#FFFCBA;padding:10px;"><span style="margin:auto;">NEED HELP? Call our support team 24/7 at<strong> +91-9981540557</strong></span></h3>
+			</div>
+			
+			<div id="menu" style="margin-top:-10px; margin-left:100px;; margin-right:100px; text-align:left;">
+				<small>AMDVS Retail Pvt. Ltd. 2014 | <u>Terms & Conditions</u> | <u>Privacy Policy</u></small<>
+			</div>
+		</div>	
+
+
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+		<script src="Javascripts/ui-bootstrap-tpls-0.12.1.js"></script>
+		<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>-->
+		
+		
+		<!--routing-->
+		<script src="Javascripts/Routing.js"></script>
+		<!--services -->
+		<script src="Javascripts/Services.js"></script>
+		<!--controllers-->
+		<script src="Javascripts/Controllers.js"></script>
+	</body>
+</html>

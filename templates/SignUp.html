@@ -1,0 +1,37 @@
+<!-- Sign-up Code Begins -->
+<div>
+	<h4>CREATE NEW ACCOUNT</h4>
+	<h5>Complete the form to create a new account.</h5>
+	<hr>
+	<div class="Name">
+		<input type="text" placeholder="Fullname" class="form-control" ng-model="newcustomer.name"/>
+	</div>
+	<div class="Name">
+		<textarea class="form-control" ng-model="newcustomer.address" placeholder="Address.." rows="4"></textarea>
+	</div>
+				
+	<div class="Name">
+		<select ng-init="City=Chhatarpur" ng-model="newcustomer.city" class="form-control">
+			<option value="" ng-selected="selected">City</option>
+			<option value="Chhatarpur" ng-selected="selected">Chhatarpur</option>
+		</select>
+	</div>
+	
+	<div class="Name">
+		<input  ng-model="newcustomer.mobile" type="text" placeholder="Mobile Number" class="form-control" maxlength="10"/>
+	</div>
+	<div class="Name">
+		<input  ng-model="newcustomer.email" type="text" placeholder="E-mail" class="form-control"/>
+	</div>
+	
+	<div class="Name">
+		<input  ng-model="newcustomer.password" type="password" placeholder="Password" class="form-control"/>
+	</div>
+	<div class="Name">
+		<button type="button" class="btn btn-lg btn-primary btn-block" ng-click="SaveCustomer()">CREATE MY ACCOUNT</button>
+	</div>
+	
+	<div class="response left" id="signup_status"><!-- Displays Response --></div>
+</div>
+<!-- Sign-up Code Ends -->
+

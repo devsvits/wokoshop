@@ -1,0 +1,88 @@
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+	
+.Name {
+	width:400px;
+	margin-top:10px;
+}
+	
+.BrandName{
+	margin-top:10px;
+}	
+
+.ProductName{
+	height:20px;
+}
+.ProductVariants{
+	margin-top:20px;
+	width:auto;
+}
+
+.Price{
+	margin-top:10px;
+	width:auto;
+}
+.AddToCart{
+	margin-top:10px;
+	width:auto;
+}
+	
+.center {
+	text-align:center;
+}
+.box {
+  margin: 5px;
+  display: inline-block;
+  width: 160px;
+  height: 275px!important;
+  background-color: #F5FBEF;
+  text-align: center;
+  vertical-align: top;
+  float: left;
+  
+}
+
+
+
+		
+			html, body {
+				margin: 0; padding:0; border: 0;
+				overflow: hidden
+			}
+			#header, #middle, #footer {
+				position: absolute;
+				width: 100%
+			}
+			#header {
+				background: #777;
+				height: 150px;
+				top: 0
+			}
+			#middle {
+				top: 100px;
+				bottom: 100px
+			}
+			#footer {
+				
+				height: 100px;
+				bottom: 0
+			}
+			#left, #right {
+				overflow-y: scroll
+			}
+			#left {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 20%;
+				height: 100%
+			}
+			#right {
+				//background: #999;
+				position: absolute;
+				left: 20%;
+				top: 0;
+				float: right;
+				width: 80%;
+				height: 100%
+			}
+
