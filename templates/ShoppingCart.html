@@ -2,15 +2,24 @@
 
 	<ul ng-init="tab = 1" class="nav nav-tabs nav-justified" role="tablist" style="margin-top:10px;">
     	<li ng-class="{active:tab==1}"><a data-toggle="tab" ng-click="tab = 1">1. Shopping cart</a></li>
-        <li ng-class="{active:tab==2}"><a data-toggle="tab" ng-click="tab = 2">2. Delivery Address</a></li>
+        <li ng-class="{active:tab==2}"><a data-toggle="tab" ng-click="TabTwo()">2. Delivery Address</a></li>
 	</ul>
 	
 	<div ng-show="tab === 1 && TotalAmount == 0">
+		
+							
+		
 		<p style="text-align: center; vertical-align: center; margin-top: 150px;" class="text-info">
-			Your cart is empty. Start shopping now!
+			
+
+			
+			Your cart is empty.
+			<a href="#start">
+				<strong>Start shopping now! </strong>
+			</a>
 		</p>
 	</div>
-		
+	
 
 	<div ng-show="tab === 1 && TotalAmount > 0">
 		<p class="text-info">
@@ -18,7 +27,7 @@
 			This is your shopping cart. Here you can edit the items, 
 			go back to the store, clear the cart, or check out.
 		
-			<button style="margin-left:200px;" type="button" class="btn btn-md btn-success" ng-click="tab = 2">Place order <span class="glyphicon glyphicon-share-alt"></span></button>
+			<button style="margin-left:200px;" type="button" class="btn btn-md btn-success" ng-click="TabTwo()">Place order <span class="glyphicon glyphicon-share-alt"></span></button>
 		</p>
 		
 	
@@ -67,15 +76,18 @@
 			</tbody>
 		</table>
 		
-		<button style="margin-left:862px;" type="button" class="btn btn-md btn-success" ng-click="tab = 2">Place order <span class="glyphicon glyphicon-share-alt"></span></button>
+		<button style="margin-left:862px;" type="button" class="btn btn-md btn-success" ng-click="TabTwo()">Place order <span class="glyphicon glyphicon-share-alt"></span></button>
 
 	</div>					
 		
 	<div ng-show="tab === 2 && TotalAmount == 0">
 		<p style="text-align: center; vertical-align: center; margin-top: 150px;" class="text-info">
-			Your cart is empty. Start shopping now!
+			Your cart is empty.
+			<a href="#start">
+				<strong>Start shopping now! </strong>
+			</a>
 		</p>
-	</div>	
+	</div>
 	
 	<div ng-show="tab === 2 && TotalAmount > 0">
 		

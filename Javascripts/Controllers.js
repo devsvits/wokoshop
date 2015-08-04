@@ -20,9 +20,27 @@ sampleApp.controller('LoginController',
     }]);
 
 
+sampleApp.controller('loginCtrl', ['$scope', 'LoginService', function ($scope, LoginService) {
+	
+	$scope.login = function () {
+		var user = {};
+		user.Email = $scope.Email;
+		user.Password = $scope.Password;
+		LoginService.login(user);
+	};
+	
+	$scope.$on('LoginSuccess', function(event, userInfo) {
+		$scope.error = '';
+	});
+	
+	$scope.$on('LoginError', function(event, userInfo) {
+		$scope.Password = '';
+		$scope.error = 'User Name or passwaord wrong';
+	});
 
+}]);
 
-sampleApp.controller('ShoppingCartController', ['$scope', '$http', 'ProductService' , 'CustomerService', function ($scope, $http, ProductService, CustomerService){
+sampleApp.controller('ShoppingCartController', ['$scope', '$http', 'LoginService', 'ProductService' , 'CustomerService', function ($scope, $http, LoginService, ProductService, CustomerService){
 	
 
 	$scope.date1 = new Date();
@@ -31,6 +49,17 @@ sampleApp.controller('ShoppingCartController', ['$scope', '$http', 'ProductServi
 	
 	//$scope.CurrentHour = ($scope.date | $scope.date:'h') ;
 	//alert ($scope.CurrentHour);
+	$scope.TabTwo = function ()  {
+		$scope.tab = 2;
+		if (LoginService.isUserLoggedIn()){
+			userInfo = LoginService.getUserInfo();
+			//alert (userInfo);
+			$scope.CustomerName = userInfo.name;
+			$scope.CustomerAddress = userInfo.address;
+			$scope.CustomerMobile = userInfo.mobile;
+			$scope.CustomerCity = userInfo.city;
+		}
+	};
 	
 	$scope.PlaceOrder = function ()  {
 		var CustomerInfo = {};
@@ -44,15 +73,6 @@ sampleApp.controller('ShoppingCartController', ['$scope', '$http', 'ProductServi
 		//alert (CustomerInfo);
 		//CustomerService.CheckCustomerInfo (CustomerInfo);
 		ProductService.FillList(CustomerInfo);
-		
-
-
-
-		
-		
-		
-		
-		
 		
 	};
 	
@@ -133,8 +153,7 @@ sampleApp.controller('ProductsController', function ($scope, $state, $location, 
 	this.MinusItem = function(ProductID, VariantID)  {
 		ProductService.MinusItem(ProductID, VariantID);
 	};
-	
-	
+
 	
 });
 
@@ -198,13 +217,39 @@ sampleApp.controller('BrandController', function( $scope, BrandService) {
 });
 
 
-sampleApp.controller('MainCtrl', function( $rootScope, $scope, $routeParams, SCService, CategoryService, BrandService, ProductService) {
+sampleApp.controller('MainCtrl', function( $rootScope, $scope, $routeParams, $location, LoginService, SCService, CategoryService, BrandService, ProductService) {
 	
-        $scope.SearchText = ''	
-        $scope.$watch('SelectedBrand', function() {
+	$scope.SearchText = ''
+	
+		
+	$scope.$watch('SelectedBrand', function() {
 		if (typeof $scope.SelectedBrand != 'undefined')  {
 			$scope.SearchText = '';
 			$rootScope.$broadcast('BrandIDChanged', $scope.SelectedBrand.id);
+		}
+	});
+	var user = LoginService.getUserInfo();
+	if (LoginService.getUserInfo()){
+		$scope.username = user.name;
+		$scope.login = 1;
+	}
+	else {
+		//alert ('somewhere');
+	}
+		
+	$scope.logOut = function() {
+		//$cookies.put('myFavorite', 'oatmeal');
+		LoginService.logOut();
+		var user ={};
+		$scope.login = 0;
+	};
+	
+	$scope.$on('LoginSuccess', function(event, userInfo) {
+		if (userInfo.login_success == 1){
+			var user = LoginService.getUserInfo() 
+			$scope.username = user.name;
+			$scope.login = 1;
+			$location.path('/Brand/');
 		}
 	});
 	

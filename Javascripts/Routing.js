@@ -156,7 +156,7 @@ sampleApp.config(function($stateProvider, $urlRouterProvider) {
 	.state('Login', {
 		templateUrl: "templates/Login.html",
 		url: "/Login",
-		controller: 'LoginController'
+		controller: 'loginCtrl'
 	})
 	.state('SignUp', {
 		templateUrl: "templates/SignUp.html",

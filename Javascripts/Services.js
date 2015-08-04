@@ -5,7 +5,6 @@ var CustomerURL = '/cgi-bin/Customer.pl';
 
 'use strict';
  
- 
 sampleApp.factory('AuthenticationService',
     ['Base64', '$http', '$cookieStore', '$rootScope', '$timeout',
     function (Base64, $http, $cookieStore, $rootScope, $timeout) {
@@ -142,6 +141,89 @@ sampleApp.factory('Base64', function () {
     /* jshint ignore:end */
 });
 
+
+
+sampleApp.factory('LoginService', function($http, $rootScope, $window) {
+	
+	var LoginService =  {};
+    var userInfo;
+	
+	LoginService.login = function(user) {
+		var credentials = {};
+		credentials.Email = user.Email;
+		credentials.Password = user.Password;
+		credentials = JSON.stringify (credentials);
+		var result;
+						
+		var req = {
+			url: 'cgi-bin/login.pl',
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json'},
+			data: credentials
+		};
+		$http(req)
+		.success(function(data, status, headers, config) {
+			userInfo = data;
+			if (data.login_success == 1){
+				$window.sessionStorage["userInfo"] = JSON.stringify(data);
+				$rootScope.$broadcast('LoginSuccess', data);
+			}
+			else {
+				$window.sessionStorage["userInfo"] = null;
+				$rootScope.$broadcast('LoginError', data);
+			}
+		})
+		.error(function (data, status, headers, config) {
+			alert (data);
+			alert (status);
+			alert ('Login Error');
+		});
+	}
+	
+	function init() {
+		if ($window.sessionStorage["userInfo"]) {
+			userInfo = JSON.parse($window.sessionStorage["userInfo"]);
+		}
+	}
+	init();
+	
+	LoginService.getUserInfo = function() {
+		return userInfo;
+	}
+	
+	LoginService.isUserLoggedIn = function() {
+		return (userInfo) ? true : false;
+	}
+	
+	LoginService.logOut = function() {
+		$window.sessionStorage["userInfo"] = null;
+		userInfo = null;
+		/*
+		
+		var deferred = $q.defer();
+
+		$http({
+		method: "POST",
+		url: logoutUrl,
+		headers: {
+		  "access_token": userInfo.accessToken
+		}
+		}).then(function(result) {
+		$window.sessionStorage["userInfo"] = null;
+		userInfo = null;
+		deferred.resolve(result);
+		}, function(error) {
+		deferred.reject(error);
+		});
+
+		return deferred.promise;
+		*/
+	}
+	
+	
+	
+	return LoginService;
+});	
 
 sampleApp.factory('SCService', function($http) {
 	
@@ -295,7 +377,7 @@ sampleApp.factory('ProductService', ['$http', '$q', '$rootScope', function ($htt
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json'},
 			data: NewOrder
-		}; 
+		};
 		
 		
 		$http(req)
